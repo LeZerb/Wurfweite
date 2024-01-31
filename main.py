@@ -10,13 +10,11 @@ from tkinter.simpledialog import askstring
 from time import sleep
 
 global UDP_RESP
-global UDP_SERVER
 
 global webServer
 global jsonServer
 
 UDP_RESP = b""
-UDP_SERVER = "127.0.0.1"
 
 responseLock = Lock()
 stop_threads = threading.Event()
@@ -46,7 +44,7 @@ class MyThreads():
 
         sock = socket.socket(socket.AF_INET, # Internet
                             socket.SOCK_DGRAM) # UDP
-        sock.bind((UDP_SERVER, UDP_PORT))
+        sock.bind(("0.0.0.0", UDP_PORT))
         sock.settimeout(1)
 
         print("UDP socket bound")
@@ -75,7 +73,7 @@ class MyThreads():
     def HttpThread():
         global webServer
 
-        hostName = "localhost"
+        hostName = "0.0.0.0"
         serverPort = 55555
         webServer = TCPServer((hostName, serverPort), HttpdServer)
         print("HTTP server started http://%s:%s" % (hostName, serverPort))
@@ -88,7 +86,7 @@ class MyThreads():
     def JsonThread():
         global jsonServer
 
-        hostName = "localhost"
+        hostName = "0.0.0.0"
         serverPort = 55556
 
         jsonServer = HTTPServer((hostName, serverPort), JsonServer)
@@ -102,33 +100,6 @@ class MyThreads():
 if __name__ == "__main__":
     myThreads = MyThreads
 
-    configfile = None
-
-    try:
-        configFile = open("settings.json", "r")
-        config = json.load(configFile)
-        UDP_SERVER=config["server"]
-    except:
-        pass
-
-    if configfile != None:
-        configFile.close()
-
-    win=Tk()
-    win.withdraw()
-
-    ip = askstring('UDP Server', 'IP Addresse aus Weitenmessung GUI\t', initialvalue=UDP_SERVER)
-    win.destroy()
-
-    if ip != None:
-        UDP_SERVER = ip
-        config={}
-        config["server"]=ip
-        configFile = open("settings.json", "w")
-        json.dump(config, configFile)
-        configFile.close()
-        print("UDP Server IP is " + ip)
-
     thHttpd = Thread(target=myThreads.HttpThread)
     thHttpd.start()
 
@@ -140,7 +111,7 @@ if __name__ == "__main__":
 
     try:
         while True:
-            sleep(1)
+            sleep(100)
     except KeyboardInterrupt:
         print("KeyboardInterrupt")
         stop_threads.set()
