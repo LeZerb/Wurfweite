@@ -7,19 +7,22 @@ function cycle() {
     var result = JSON.parse(httpRequest.responseText);
     console.log(result)
 
-    if (result.JIDS.includes("WMTNX")) {
-        document.getElementById("Athlete").innerHTML = result.NEXTATHLETE[0].NAME + ", " + result.NEXTATHLETE[0].VNAME;
-        document.getElementById("Background").innerHTML = result.NEXTATHLETE[0].CLUB;
-        document.getElementById("Attempt").innerHTML = result.NEXTATHLETE[0].ATTEMPT;
-        document.getElementById("Rank").innerHTML = result.NEXTATHLETE[0].RANK;
-        document.getElementById("Distance").innerHTML = "-";
-    }
-    else if (result.JIDS.includes("WMTMS")) {
-        document.getElementById("Athlete").innerHTML = result.MEASURED[0].NAME + ", " + result.MEASURED[0].VNAME;
-        document.getElementById("Background").innerHTML = result.MEASURED[0].CLUB;
-        document.getElementById("Attempt").innerHTML = result.MEASURED[0].ATTEMPT;
-        document.getElementById("Rank").innerHTML = result.MEASURED[0].RANK;
-        document.getElementById("Distance").innerHTML = result.MEASURED[0].DISTANCE;
+    if (result.JIDS.includes("WMTNX") || result.JIDS.includes("WMTMS")) {
+        var athlete;
+
+        if (result.JIDS.includes("WMTNX")) {
+            athlete = result.NEXTATHLETE[0];
+            document.getElementById("Distance").innerHTML = "-";
+        }
+        else {
+            athlete = result.MEASURED[0];
+            document.getElementById("Distance").innerHTML = athlete.DISTANCE;
+        }
+
+        document.getElementById("Athlete").innerHTML = athlete.NAME + ", " + athlete.VNAME;
+        document.getElementById("Background").innerHTML = athlete.CLUB;
+        document.getElementById("Attempt").innerHTML = athlete.ATTEMPT;
+        document.getElementById("Rank").innerHTML = athlete.RANK;
     }
 }
 
