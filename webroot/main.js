@@ -2,7 +2,7 @@ var counter = 0;
 
 function cycle() {
     var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", "http://localhost:55556", false); // false for synchronous request
+    httpRequest.open("GET", "http://" + location.hostname + ":55556", false); // false for synchronous request
     httpRequest.send();
     var result = JSON.parse(httpRequest.responseText);
     console.log(result)
