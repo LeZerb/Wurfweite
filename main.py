@@ -57,7 +57,7 @@ class MyThreads():
                 data = data[:(len(data)-1)]
                 print(data + b"\n")
                 # only handle next athlete and measurement
-                if (data.find(b"\"JIDS\":\"WMTNX") >= 0) or (data.find(b"\"JIDS\":\"WMTMS") >= 0):
+                if (data.find(b"\"NEXTATHLETE\":[") >= 0) or (data.find(b"\"MEASURED\":[") >= 0):
                     responseLock.acquire()
                     UDP_RESP=data
                     responseLock.release()

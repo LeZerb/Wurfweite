@@ -7,10 +7,10 @@ function cycle() {
     var result = JSON.parse(httpRequest.responseText);
     console.log(result)
 
-    if (result.JIDS.includes("WMTNX") || result.JIDS.includes("WMTMS")) {
+    if (result.hasOwnProperty("NEXTATHLETE") || result.hasOwnProperty("MEASURED")) {
         var athlete;
 
-        if (result.JIDS.includes("WMTNX")) {
+        if (result.hasOwnProperty("NEXTATHLETE")) {
             athlete = result.NEXTATHLETE[0];
             document.getElementById("Distance").innerHTML = "-";
         }
